@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import RazorpayPayment from './razorpayPayment';
 
 const Homepage = () => {
   const navigate = useNavigate();
@@ -18,6 +19,9 @@ const Homepage = () => {
     toast.success("Logout successful");
     navigate('/login');
   };
+
+  
+  const userId = localStorage.getItem('userId');
 
   return (
     <div style={{ textAlign: 'center', padding: '40px' }}>
@@ -51,7 +55,10 @@ const Homepage = () => {
   }}
   
 />
-<img src="/images/qr-code.jpg" alt="QR Code" width={200}  />
+ <div style={{ marginTop: '30px' }}>
+        <RazorpayPayment userId={userId} />
+      </div>
+
     </div>
   );
 };

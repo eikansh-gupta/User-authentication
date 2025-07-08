@@ -40,7 +40,8 @@ const Login = () => {
       } else {
         setSuccess(data.message);
         toast.success("Login successful");
-        localStorage.setItem("token", data.token); 
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.userId); 
         navigate("/"); 
        
       }

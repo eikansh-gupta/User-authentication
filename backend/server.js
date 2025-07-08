@@ -24,8 +24,12 @@ app.use(passport.session());
 
 
 const authRoutes = require('./routes/authRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
+console.log('paymentRoutes:', paymentRoutes);
+
 console.log('authRoutes:', authRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/payment', paymentRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

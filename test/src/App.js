@@ -1,11 +1,11 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Homepage from './components/homepage';
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Payment from "./components/payment";
+import RazorpayPayment from "./components/razorpayPayment";
 
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/payment" element={<Payment />} />
+          <Route path="/payment" element={<RazorpayPayment userId={localStorage.getItem("userId")} />} />
         </Routes>
       </Router>
 
