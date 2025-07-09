@@ -4,6 +4,7 @@ const express = require('express');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const Payment = require('../models/payment');
+const verifyToken = require('../middleware/verifyToken');
 require('dotenv').config();
 
 const router = express.Router();
@@ -13,7 +14,7 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-router.post('/create-order', async (req, res) => {
+router.post('/create-order', verifyToken, async (req, res) => {
   const { amount } = req.body;
 
   const options = {
@@ -31,13 +32,23 @@ router.post('/create-order', async (req, res) => {
 });
 
 
-router.post('/verify-payment', async (req, res) => {
+router.post('/verify-payment', verifyToken, async (req, res) => {
   const {
     razorpay_order_id,
     razorpay_payment_id,
     razorpay_signature,
     userId
   } = req.body;
+  
+  const userIdFromToken = req.user.userId;
+  const emailFromToken = req.user.email;
+  console.log("From token:", userIdFromToken);
+  console.log("From body:", userId);
+
+
+   if (String(userId) !== String(userIdFromToken)) {
+    return res.status(403).json({ success: false, message: 'Unauthorized user' });
+  }
 
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSignature = crypto
@@ -48,6 +59,7 @@ router.post('/verify-payment', async (req, res) => {
   if (expectedSignature === razorpay_signature) {
     const payment = new Payment({
       userId,
+      email: emailFromToken,
       razorpay_order_id,
       razorpay_payment_id,
       amount: 500, 
